@@ -1,0 +1,19 @@
+[
+  {
+    "username": "Raj Singh",
+    "roles": { "User": 2001, "Editor": 1984 },
+    "password": "$2b$10$hy28OLKodQj6aPw/eaI7s.f1rvYg5C.1eKACm.JCapD/kLxXz/Kme"
+  },
+  {
+    "username": "Raj Birani",
+    "roles": { "User": 2001, "Editor": 1984, "Admin": 5150 },
+    "password": "$2b$10$2kJMgFY5k97ftGGNX9gXUOZEFO4korui/MWWbFOJz06Iq1v/FMga6",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJhaiBCaXJhbmkiLCJpYXQiOjE3MTQxMzEzMzcsImV4cCI6MTcxNDIxNzczN30.02g-B5fBIz9nf6qLLvQIMrwxGYWVDqsCCzMJXXiCIRE"
+  },
+  {
+    "username": "Raj Vardhan",
+    "roles": { "User": 2001 },
+    "password": "$2b$10$tvnlBZsyeyvrUxGRPkF7NOf3u6m4FBVVWWrHp6LWULZ9QdJAtyDem",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJhaiBWYXJkaGFuIiwiaWF0IjoxNzE0MTM1MTI5LCJleHAiOjE3MTQyMjE1Mjl9.ILNVssD5SyRUzAEmn9oKOpe2RqMGLv9l6en_1aW9jik"
+  }
+]

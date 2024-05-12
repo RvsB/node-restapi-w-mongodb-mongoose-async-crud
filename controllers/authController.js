@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res) => {
+  const cookies = req.cookies;
+  console.log(`cookie available at login: ${JSON.stringify(cookies)}`);
   const { username, password } = req.body;
   if (!username || !password)
     return res
@@ -31,7 +33,7 @@ const handleLogin = async (req, res) => {
       }
     );
 
-    const refreshToken = jwt.sign(
+    const newRefreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       {
@@ -39,12 +41,44 @@ const handleLogin = async (req, res) => {
       }
     );
 
+    let newRefreshTokenArray = !cookies?.jwt
+      ? foundUser.refreshToken
+      : foundUser.refreshToken.filter((rt) => rt !== cookies.jwt);
+
+    if (cookies?.jwt) {
+      /*
+  Scenarion added here:
+  - User logs in but never uses the RT and does not log out
+  - RT is stolen
+  - If 1 & 2, reuse detection is needed to clear all RTs when user logs in 
+ */
+      //why didnt we use the find method on the foundUser.refreshToken array, that will also do the same thing
+      const refreshToken = cookies.jwt;
+      // const foundToken = await User.findOne({ refreshToken }).exec(); //instead of this we can do the following too
+      const foundToken = foundUser.refreshToken.find(
+        (rt) => rt === refreshToken
+      );
+
+      //Detected refresh token reuse
+      if (!foundToken) {
+        console.log("attempted refresh token reuse at login!");
+        //clear out ALL previous refresh tokens
+        newRefreshTokenArray = [];
+      }
+
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "None",
+        secure: "true",
+      });
+    }
+
     //saving refresh token with current user
-    foundUser.refreshToken = refreshToken;
+    foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
     const result = await foundUser.save();
     console.log(result);
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("jwt", newRefreshToken, {
       httpOnly: true,
       sameSite: "None",
       //when working with thunderclient, we need to comment this out else the cookie wont work and endpoint too
